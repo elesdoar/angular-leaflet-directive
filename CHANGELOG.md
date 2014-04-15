@@ -1,3 +1,10 @@
+<a name="0.8.0-dev"></a>
+### 0.8.0-dev
+
+#### Refactoring
+
+* Change Leaflet to develpment version. (Master)
+
 <a name="0.7.6"></a>
 ### 0.7.6 (2014-03-20)
 
