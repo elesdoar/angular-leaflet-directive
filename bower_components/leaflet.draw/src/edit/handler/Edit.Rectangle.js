@@ -66,7 +66,7 @@ L.Edit.Rectangle = L.Edit.SimpleShape.extend({
 
 		this._shape.setLatLngs(newLatLngs);
 
-		// Reposition the resize markers
+		// Respoition the resize markers
 		this._repositionCornerMarkers();
 	},
 
@@ -76,7 +76,7 @@ L.Edit.Rectangle = L.Edit.SimpleShape.extend({
 		// Update the shape based on the current position of this corner and the opposite point
 		this._shape.setBounds(L.latLngBounds(latlng, this._oppositeCorner));
 
-		// Reposition the move marker
+		// Respoition the move marker
 		bounds = this._shape.getBounds();
 		this._moveMarker.setLatLng(bounds.getCenter());
 	},

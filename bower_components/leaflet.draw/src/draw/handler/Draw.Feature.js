@@ -13,17 +13,17 @@ L.Draw.Feature = L.Handler.extend({
 		if (options && options.shapeOptions) {
 			options.shapeOptions = L.Util.extend({}, this.options.shapeOptions, options.shapeOptions);
 		}
-		L.setOptions(this, options);
+		L.Util.extend(this.options, options);
 	},
 
 	enable: function () {
 		if (this._enabled) { return; }
 
+		L.Handler.prototype.enable.call(this);
+
 		this.fire('enabled', { handler: this.type });
 
 		this._map.fire('draw:drawstart', { layerType: this.type });
-
-		L.Handler.prototype.enable.call(this);
 	},
 
 	disable: function () {
@@ -31,22 +31,18 @@ L.Draw.Feature = L.Handler.extend({
 
 		L.Handler.prototype.disable.call(this);
 
-		this._map.fire('draw:drawstop', { layerType: this.type });
-
 		this.fire('disabled', { handler: this.type });
+
+		this._map.fire('draw:drawstop', { layerType: this.type });
 	},
 
 	addHooks: function () {
-		var map = this._map;
-
-		if (map) {
+		if (this._map) {
 			L.DomUtil.disableTextSelection();
-
-			map.getContainer().focus();
 
 			this._tooltip = new L.Tooltip(this._map);
 
-			L.DomEvent.on(this._container, 'keyup', this._cancelDrawing, this);
+			L.DomEvent.addListener(this._container, 'keyup', this._cancelDrawing, this);
 		}
 	},
 
@@ -57,7 +53,7 @@ L.Draw.Feature = L.Handler.extend({
 			this._tooltip.dispose();
 			this._tooltip = null;
 
-			L.DomEvent.off(this._container, 'keyup', this._cancelDrawing, this);
+			L.DomEvent.removeListener(this._container, 'keyup', this._cancelDrawing);
 		}
 	},
 

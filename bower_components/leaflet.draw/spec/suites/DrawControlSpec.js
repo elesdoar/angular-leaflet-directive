@@ -1,14 +1,15 @@
-describe("Control.Draw", function () {
+describe("Control.Draw", function(){
 	var map, control, container;
 
-	beforeEach(function () {
+	beforeEach(function(){
 		map = L.map(document.createElement('div'));
-		control = new L.Control.Draw({});
-		map.addControl(control);
+		control = new L.Control.Draw({
+
+		}).addTo(map);
 		container = control.getContainer();
 	});
 
-	it("exists", function () {
+	it("exists", function() {
 		expect(container.innerHTML).to.be.ok();
 	});
 });

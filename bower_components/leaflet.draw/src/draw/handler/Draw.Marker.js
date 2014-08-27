@@ -81,7 +81,6 @@ L.Draw.Marker = L.Draw.Feature.extend({
 				.addLayer(this._marker);
 		}
 		else {
-			latlng = this._mouseMarker.getLatLng();
 			this._marker.setLatLng(latlng);
 		}
 	},

@@ -19,56 +19,12 @@ L.Toolbar = L.Class.extend({
 		this._activeMode.handler.disable();
 	},
 
-	addToolbar: function (map) {
-		var container = L.DomUtil.create('div', 'leaflet-draw-section'),
-			buttonIndex = 0,
-			buttonClassPrefix = this._toolbarClass || '',
-			modeHandlers = this.getModeHandlers(map),
-			i;
-
-		this._toolbarContainer = L.DomUtil.create('div', 'leaflet-draw-toolbar leaflet-bar');
-		this._map = map;
-
-		for (i = 0; i < modeHandlers.length; i++) {
-			if (modeHandlers[i].enabled) {
-				this._initModeHandler(
-					modeHandlers[i].handler,
-					this._toolbarContainer,
-					buttonIndex++,
-					buttonClassPrefix,
-					modeHandlers[i].title
-				);
-			}
-		}
-
-		// if no buttons were added, do not add the toolbar
-		if (!buttonIndex) {
-			return;
-		}
-
-		// Save button index of the last button, -1 as we would have ++ after the last button
-		this._lastButtonIndex = --buttonIndex;
-
-		// Create empty actions part of the toolbar
-		this._actionsContainer = L.DomUtil.create('ul', 'leaflet-draw-actions');
-
-		// Add draw and cancel containers to the control container
-		container.appendChild(this._toolbarContainer);
-		container.appendChild(this._actionsContainer);
-
-		return container;
-	},
-
 	removeToolbar: function () {
 		// Dispose each handler
 		for (var handlerId in this._modes) {
 			if (this._modes.hasOwnProperty(handlerId)) {
 				// Unbind handler button
-				this._disposeButton(
-					this._modes[handlerId].button,
-					this._modes[handlerId].handler.enable,
-					this._modes[handlerId].handler
-				);
+				this._disposeButton(this._modes[handlerId].button, this._modes[handlerId].handler.enable);
 
 				// Make sure is disabled
 				this._modes[handlerId].handler.disable();
@@ -83,11 +39,7 @@ L.Toolbar = L.Class.extend({
 
 		// Dispose the actions toolbar
 		for (var i = 0, l = this._actionButtons.length; i < l; i++) {
-			this._disposeButton(
-				this._actionButtons[i].button,
-				this._actionButtons[i].callback,
-				this
-			);
+			this._disposeButton(this._actionButtons[i].button, this._actionButtons[i].callback);
 		}
 		this._actionButtons = [];
 		this._actionsContainer = null;
@@ -148,7 +100,9 @@ L.Toolbar = L.Class.extend({
 
 	_handlerActivated: function (e) {
 		// Disable active mode (if present)
-		this.disable();
+		if (this._activeMode && this._activeMode.handler.enabled()) {
+			this._activeMode.handler.disable();
+		}
 
 		// Cache new active feature
 		this._activeMode = this._modes[e.handler];
@@ -170,28 +124,12 @@ L.Toolbar = L.Class.extend({
 		this.fire('disable');
 	},
 
-	_createActions: function (handler) {
-		var container = this._actionsContainer,
-			buttons = this.getActions(handler),
+	_createActions: function (buttons) {
+		var container = L.DomUtil.create('ul', 'leaflet-draw-actions'),
 			l = buttons.length,
-			li, di, dl, button;
-
-		// Dispose the actions toolbar (todo: dispose only not used buttons)
-		for (di = 0, dl = this._actionButtons.length; di < dl; di++) {
-			this._disposeButton(this._actionButtons[di].button, this._actionButtons[di].callback);
-		}
-		this._actionButtons = [];
-
-		// Remove all old buttons
-		while (container.firstChild) {
-			container.removeChild(container.firstChild);
-		}
+			li, button;
 
 		for (var i = 0; i < l; i++) {
-			if ('enabled' in buttons[i] && !buttons[i].enabled) {
-				continue;
-			}
-
 			li = L.DomUtil.create('li', '', container);
 
 			button = this._createButton({
@@ -207,15 +145,16 @@ L.Toolbar = L.Class.extend({
 				callback: buttons[i].callback
 			});
 		}
+
+		return container;
 	},
 
 	_showActionsToolbar: function () {
 		var buttonIndex = this._activeMode.buttonIndex,
 			lastButtonIndex = this._lastButtonIndex,
-			toolbarPosition = this._activeMode.button.offsetTop - 1;
-
-		// Recreate action buttons on every click
-		this._createActions(this._activeMode.handler);
+			buttonHeight = 26, // TODO: this should be calculated
+			borderHeight = 1, // TODO: this should also be calculated
+			toolbarPosition = (buttonIndex * buttonHeight) + (buttonIndex * borderHeight) - 1;
 
 		// Correctly position the cancel button
 		this._actionsContainer.style.top = toolbarPosition + 'px';

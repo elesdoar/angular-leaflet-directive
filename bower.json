@@ -8,6 +8,7 @@
     "leaflet"
   ],
   "main": [
+<<<<<<< HEAD
     "dist/angular-leaflet-directive.js"
   ],
   "dependencies": {
@@ -39,6 +40,28 @@
     "Leaflet.utfgrid": {
       "main": "dist/leaflet.utfgrid.js"
     }
+=======
+    "dist/angular-leaflet-directive.js",
+    "dist/angular-leaflet-directive.min.js"
+  ],
+  "dependencies": {
+    "angular": "1.2.x",
+    "leaflet-dist": "0.7.x"
+  },
+  "devDependencies": {
+    "jquery": "2.1.x",
+    "bootstrap": "3.1.x",
+    "angular-route": "1.2.x",
+    "angular-animate": "1.2.x",
+    "angular-mocks": "1.2.x",
+    "leaflet.markerclusterer": "0.4",
+    "leaflet.draw": "0.2.2",
+    "Leaflet.label": "0.2.1",
+    "leaflet-tilelayer-geojson": "*",
+    "Leaflet.awesome-markers": "*",
+    "leaflet-plugins": "1.0.1",
+    "esri-leaflet": "0.0.1-beta.4"
+>>>>>>> b2852766ea597fedaeeaaf1593a70f1d526a6799
   },
   "ignore": [
     "**/.*",

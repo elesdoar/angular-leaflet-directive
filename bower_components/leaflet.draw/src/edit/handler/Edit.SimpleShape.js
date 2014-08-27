@@ -100,8 +100,6 @@ L.Edit.SimpleShape = L.Handler.extend({
 	_onMarkerDragStart: function (e) {
 		var marker = e.target;
 		marker.setOpacity(0);
-
-		this._shape.fire('editstart');
 	},
 
 	_fireEdit: function () {
