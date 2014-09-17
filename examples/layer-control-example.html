@@ -2,7 +2,7 @@
 <html ng-app="demoapp">
 <head>
     <script src="../bower_components/jquery/dist/jquery.min.js"></script>
-    <script src="../bower_components/ionrangeslider/js/ion.rangeSlider.min.js"></script>
+    <script src="../bower_components/ionrangeslider/js/ion.rangeSlider.js"></script>
     <script src="../bower_components/angular/angular.min.js"></script>
     <script src="../bower_components/leaflet/dist/leaflet.js"></script>
     <script src="../dist/angular-leaflet-directive.js"></script>
@@ -10,12 +10,16 @@
     <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="../bower_components/ionrangeslider/css/ion.rangeSlider.css">
     <link rel="stylesheet" href="../bower_components/ionrangeslider/css/ion.rangeSlider.skinNice.css">
-    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script>
         angular.module("demoapp", ["leaflet-directive"]);
         function DynamicOverlaysController($scope) {
             angular.extend($scope, {
+                icons: {
+                  uncheck: 'fa fa-toggle-off',
+                  check: 'fa fa-toggle-on'
+                },
                 ripoll: {
                     lat: 42.20133,
                     lng: 2.19110,
@@ -68,6 +72,15 @@
                             name: 'OpenFireMap',
                             type: 'xyz',
                             url: 'http://openfiremap.org/hytiles/{z}/{x}/{y}.png',
+                            layerOptions: {
+                                attribution: '&copy; <a href="http://www.openfiremap.org">OpenFireMap</a> contributors - &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                                continuousWorld: true
+                            }
+                        },
+                        em: {
+                            name: 'Emergency Rooms',
+                            type: 'xyz',
+                            url: 'http://openfiremap.org/eytiles/{z}/{x}/{y}.png',
                             layerOptions: {
                                 attribution: '&copy; <a href="http://www.openfiremap.org">OpenFireMap</a> contributors - &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
                                 continuousWorld: true
@@ -130,15 +143,26 @@
 
       .angular-leaflet-control-layers .lf-row label {
         cursor: pointer;
-        width: 100%;
+        width: 76%;
       }
 
-      .angular-leaflet-control-layers .lf-row label .lf-icons {
+      .angular-leaflet-control-layers .lf-row .lf-icons {
         float: right;
       }
 
       .angular-leaflet-control-layers .lf-row label .lf-icon {
         cursor: pointer;
+        float: left;
+        margin-right: 5px;
+        padding-top: 2px;
+      }
+
+      .angular-leaflet-control-layers .lf-row label .lf-text {
+        float: left;
+      }
+
+      .angular-leaflet-control-layers .lf-opacity {
+          clear:both;
       }
     </style>
 </head>
@@ -151,7 +175,7 @@
           <div class="row">
               <p>
               <leaflet center="ripoll" layers="layers" height="480px" width="640px">
-                <layercontrol></layercontrol>
+                  <layercontrol order="normal" set-icons="icons"></layercontrol>
               </leaflet>
               </p>
           </div>
