@@ -32,6 +32,24 @@ angular.module("leaflet-directive").directive('legend', function (leafletLogger,
                     }
                 }, true);
 
+                var createLegend = function(map, legendData, newURL) {
+                    if(legendData && legendData.layers && legendData.layers.length > 0) {
+                        if (isDefined(leafletLegend)) {
+                            leafletLegendHelpers.updateLegend(leafletLegend.getContainer(), legendData, type, newURL);
+                        } else {
+                            leafletLegend = L.control({
+                                position: position
+                            });
+                            leafletLegend.onAdd = leafletLegendHelpers.getOnAddLegend(legendData, legendClass, type, newURL);
+                            leafletLegend.addTo(map);
+                        }
+
+                        if (isDefined(legend.loadedData) && isFunction(legend.loadedData)) {
+                            legend.loadedData();
+                        }
+                    }
+                };
+
                 controller.getMap().then(function (map) {
                     leafletScope.$watch('legend', function (newLegend) {
                         if (!isDefined(newLegend)) {
@@ -94,21 +112,7 @@ angular.module("leaflet-directive").directive('legend', function (leafletLogger,
                                 }
 
                                 if(idx === urls.length-1) {
-                                    if(legendData && legendData.layers && legendData.layers.length > 0) {
-                                        if (isDefined(leafletLegend)) {
-                                            leafletLegendHelpers.updateLegend(leafletLegend.getContainer(), legendData, type, newURL);
-                                        } else {
-                                            leafletLegend = L.control({
-                                                position: position
-                                            });
-                                            leafletLegend.onAdd = leafletLegendHelpers.getOnAddLegend(legendData, legendClass, type, newURL);
-                                            leafletLegend.addTo(map);
-                                        }
-
-                                        if (isDefined(legend.loadedData) && isFunction(legend.loadedData)) {
-                                            legend.loadedData();
-                                        }
-                                    }
+                                    createLegend(map, legendData, newURL);
                                 }
                             };
                         };
@@ -124,7 +128,16 @@ angular.module("leaflet-directive").directive('legend', function (leafletLogger,
                         }
                     });
 
+                    leafletScope.$watch('legend.legendData', function (legendData) {
+                        $log.debug('legendData', legendData);
+                        if(isDefined(leafletScope.legend.url) || !isDefined(legendData)) {
+                            return;
+                        }
+
+                        createLegend(map, legendData);
+                    }, true);
                 });
+
             }
         };
     });

@@ -785,6 +785,14 @@
             "id": "/mixed/esri-multilayer-legend-service-example",
             "extUrl": "0607-mixed-esri-multilayer-legend-service-example.html",
             "title": "Esri ArcGIS Multilayer Legend Service"
+        },
+        {
+            "date": "2015-09-23T23:56:06.995Z",
+            "section": "mixed",
+            "onlyStandAlone": false,
+            "id": "/mixed/esri-legenddata-service-example",
+            "extUrl": "0608-mixed-esri-legenddata-service-example.html",
+            "title": "Esri ArcGIS with legend data"
         }
     ]
 }
