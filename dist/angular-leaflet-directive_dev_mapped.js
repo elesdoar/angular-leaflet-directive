@@ -1,5 +1,5 @@
 /*!
-*  angular-leaflet-directive 0.8.8 2015-09-22
+*  angular-leaflet-directive 0.8.8 2015-09-23
 *  angular-leaflet-directive - An AngularJS directive to easily interact with Leaflet maps
 *  git: https://github.com/tombatossals/angular-leaflet-directive
 */
@@ -4276,12 +4276,16 @@ angular.module("leaflet-directive").directive('legend', function (leafletLogger,
                         var urls = isString(newURL)? [newURL]:newURL;
 
                         var legendData;
-                        var onResult = function(idx) {
+                        var onResult = function(idx, url) {
                             return function(ld) {
-                                if(legendData && legendData.layers && legendData.layers.length > 0) {
-                                    legendData.layers = legendData.layers.concat(ld.data.layers);
+                                if(isDefined(ld.data.error)) {
+                                    $log.warn(errorHeader + 'Error loadin legend from: ' + url, ld.data.error.message);
                                 } else {
-                                    legendData = ld.data;
+                                    if(legendData && legendData.layers && legendData.layers.length > 0) {
+                                        legendData.layers = legendData.layers.concat(ld.data.layers);
+                                    } else {
+                                        legendData = ld.data;
+                                    }
                                 }
 
                                 if(idx === urls.length-1) {
