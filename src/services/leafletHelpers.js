@@ -126,11 +126,11 @@ angular.module("leaflet-directive").service('leafletHelpers', function ($q, $log
 
 
     /**
-    Converts all accepted directives format into proper directive name.
-    @param name Name to normalize
-     */
+     Converts all accepted directives format into proper directive name.
+     @param name Name to normalize
+    */
 
-     var directiveNormalize = function(name) {
+    var directiveNormalize = function(name) {
       return camelCase(name.replace(PREFIX_REGEXP, ""));
     };
 
